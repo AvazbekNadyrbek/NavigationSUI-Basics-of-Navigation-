@@ -24,16 +24,25 @@ struct NavigationSUIApp: App {
                             MovieDetailsView(movie: movie)
                         case .login:
                             LoginScreen()
-                            // LoginScreen
                         case .register:
                             RegisterScreen()
-                            //RegisterScreen
                         case .reviews(let reviews):
                             ReviewListScreen(reviews: reviews)
-                            
                         }
                     }
-            }.environment(router)
+            }
+            .environment(\.navigate, NavigateAction(action: performNavigate))
+            .environment(router)
+        }
+    }
+    
+    func performNavigate(_ navigationType: NavigationType) {
+        switch navigationType {
+        case .push(let route):
+            router.routes.append(route)
+        case .unwind(let route):
+            guard let index = router.routes.firstIndex(where: { $0 == route }) else { return }
+            router.routes = Array(router.routes.prefix(upTo: index + 1))
         }
     }
 }

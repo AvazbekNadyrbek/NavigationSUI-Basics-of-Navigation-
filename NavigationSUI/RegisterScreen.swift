@@ -8,26 +8,39 @@
 import SwiftUI
 
 struct RegisterScreen: View {
-    @Environment(Router.self) private var router
+    @Environment(\.navigate) private var navigate
     
     var body: some View {
-
-        VStack {
+        VStack(spacing: 20) {
             Text("Register Screen")
                 .font(.largeTitle)
+                .bold()
                 .padding()
             
-            Button("Go to Movie Detai ls Screen") {
-                router.addRoute(.detail(Movie(name:"Lord of Screen")))
+            Button("Go to Movie Details Screen") {
+                navigate(.push(.detail(Movie(name: "Lord of the Rings"))))
             }
+            .padding()
+            .background(Color.orange)
+            .foregroundColor(.white)
+            .cornerRadius(10)
             
-            Button("Pop to Root") {
-                router.popToRoot()
+            Button("Go to Login") {
+                navigate(.push(.login))
             }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
         }
+        .padding()
+        .navigationTitle("Register")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
-    RegisterScreen()
+    NavigationStack {
+        RegisterScreen()
+    }
 }

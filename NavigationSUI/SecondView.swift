@@ -59,14 +59,14 @@ struct ReviewListScreen: View {
 
 struct SecondView: View {
     
-    @Environment(Router.self) private var router
+    @Environment(\.navigate) private var navigate
     
     var body: some View {
         
         
         VStack {
             Button("Movie Details") {
-                router.addRoute(.detail(Movie(name: "Batman")))
+                navigate(.push(.detail(Movie(name: "Batman"))))
             }
             
         }
@@ -75,7 +75,6 @@ struct SecondView: View {
 }
 
 struct ContentViewContainer: View {
-    
     @State private var router = Router()
     
     var body: some View {
@@ -86,20 +85,28 @@ struct ContentViewContainer: View {
                     case .create:
                         Text("Create")
                     case .detail(let movie):
-                        MovieDetailsView(movie: movie)
+                        MovieDetailsView1(movie: movie)
                     case .login:
                         LoginScreen() 
-                        // LoginScreen
                     case .register:
                         RegisterScreen()
-                        //RegisterScreen
                     case .reviews(let reviews):
                         ReviewListScreen(reviews: reviews)
-                        
                     }
                 }
-        }.environment(router)
-        
+        }
+        .environment(\.navigate, NavigateAction(action: performNavigate))
+        .environment(router)
+    }
+    
+    private func performNavigate(_ navigationType: NavigationType) {
+        switch navigationType {
+        case .push(let route):
+            router.routes.append(route)
+        case .unwind(let route):
+            guard let index = router.routes.firstIndex(where: { $0 == route }) else { return }
+            router.routes = Array(router.routes.prefix(upTo: index + 1))
+        }
     }
 }
 

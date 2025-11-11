@@ -1,4 +1,3 @@
-
 //
 //  MovieDetailsView.swift
 //  NavigationSUI
@@ -8,7 +7,7 @@
 
 import SwiftUI
 
-struct MovieDetailsView1: View {
+struct MovieDetailsView: View {
     let movie: Movie
     @Environment(\.navigate) private var navigate
     
@@ -50,7 +49,6 @@ struct MovieDetailsView1: View {
 
 #Preview {
     NavigationStack {
-        MovieDetailsView1(movie: Movie(name: "Batman"))
+        MovieDetailsView(movie: Movie(name: "Batman"))
     }
 }
-
